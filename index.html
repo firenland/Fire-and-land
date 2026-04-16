@@ -187,8 +187,46 @@
   #contact-form button[type="submit"]:disabled { opacity: 0.5; cursor: not-allowed; }
   @media (max-width: 768px) { .form-row { grid-template-columns: 1fr; } }
 
+/* ── Formspree Contact Form ─────────────────────────── */
+.contact-inner { max-width: 680px; margin: 0 auto; }
+.contact-header { margin-bottom: 3rem; }
+.contact-sub { color: var(--color-muted, #888); font-size: 0.95rem; line-height: 1.7; max-width: 520px; }
+#contact-form { display: flex; flex-direction: column; gap: 1.25rem; }
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; }
+@media (max-width: 560px) { .form-row { grid-template-columns: 1fr; } }
+.form-group { display: flex; flex-direction: column; gap: 0.4rem; }
+label { font-size: 0.75rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--color-muted, #888); }
+.optional { font-size: 0.7rem; opacity: 0.6; text-transform: none; letter-spacing: 0; }
+#contact-form input, #contact-form textarea { background: transparent; border: 1px solid rgba(240,237,232,0.12); color: var(--color-text, #f0ede8); padding: 0.85rem 1rem; font-size: 0.95rem; font-family: inherit; border-radius: 2px; transition: border-color 0.2s, background 0.2s; width: 100%; box-sizing: border-box; -webkit-appearance: none; }
+#contact-form input::placeholder, #contact-form textarea::placeholder { color: rgba(240,237,232,0.25); }
+#contact-form input:focus, #contact-form textarea:focus { outline: none; border-color: rgba(240,237,232,0.45); background: rgba(240,237,232,0.03); }
+#contact-form input[aria-invalid="true"], #contact-form textarea[aria-invalid="true"] { border-color: #c0392b; }
+#contact-form textarea { resize: vertical; min-height: 130px; line-height: 1.6; }
+.btn-submit { align-self: flex-start; background: var(--color-text, #f0ede8); color: var(--color-bg, #0d0d0d); border: none; padding: 0.9rem 2.5rem; font-size: 0.8rem; letter-spacing: 0.12em; text-transform: uppercase; font-family: inherit; font-weight: 500; border-radius: 2px; cursor: pointer; transition: opacity 0.2s, transform 0.15s; margin-top: 0.5rem; }
+.btn-submit:hover:not(:disabled) { opacity: 0.85; transform: translateY(-1px); }
+.btn-submit:disabled { opacity: 0.5; cursor: not-allowed; }
+.btn-submit .btn-sending { display: none; }
+.btn-submit[disabled] .btn-text { display: none; }
+.btn-submit[disabled] .btn-sending { display: inline; }
+.field-error { font-size: 0.78rem; color: #e74c3c; min-height: 1em; display: block; }
+.fs-form-error { font-size: 0.85rem; color: #e74c3c; border: 1px solid rgba(231,76,60,0.3); border-radius: 2px; padding: 0.75rem 1rem; display: none; margin-bottom: 1rem; }
+.fs-form-error:not(:empty) { display: block; }
+.fs-success { display: none; align-items: center; gap: 0.75rem; color: var(--color-text, #f0ede8); padding: 1.5rem 0; border-top: 1px solid rgba(240,237,232,0.12); border-bottom: 1px solid rgba(240,237,232,0.12); margin-bottom: 2rem; }
+.contact-alt { margin-top: 2rem; font-size: 0.85rem; color: var(--color-muted, #888); }
+.contact-alt a { color: var(--color-text, #f0ede8); text-decoration: none; border-bottom: 1px solid rgba(240,237,232,0.3); transition: border-color 0.2s; }
+.contact-alt a:hover { border-color: var(--color-text, #f0ede8); }
+
 </style>
 </head>
+
+<script>
+  window.formspree = window.formspree || function () {
+    (formspree.q = formspree.q || []).push(arguments);
+  };
+  formspree('initForm', { formElement: '#contact-form', formId: 'mykdojkq' });
+</script>
+<script src="https://unpkg.com/@formspree/ajax@1" defer></script>
+
 <body>
 
 <nav>
@@ -374,14 +412,51 @@
   </div>
 </div>
 
-<section class="contact" id="contact">
+<section id="contact">
   <div class="contact-inner">
-    <p class="section-label">Get in Touch</p>
-    <h2 class="section-title">Ready to <em>build?</em></h2>
-    <a href="/cdn-cgi/l/email-protection#b8d0ddd4d4d7f8ded1caddd9d6dcd4d9d6dc96dbd9" class="email-link"><span class="__cf_email__" data-cfemail="345c5158585b74525d4651555a5058555a501a5755">[email&#160;protected]</span></a>
-    <p class="contact-note">Fire and Land takes a limited number of commissions per year. If you're serious about a build, reach out early. We'll tell you honestly whether your timeline and site are a fit.</p>
-    <div class="divider" style="margin:2rem auto;"></div>
-    <p class="contact-note">Based in Osoyoos, BC &nbsp;·&nbsp; fireandland.ca</p>
+    <div class="contact-header">
+      <p class="section-label">Get in Touch</p>
+      <h2>Ready to build?</h2>
+      <p class="contact-sub">Fire and Land takes a limited number of commissions per year. If you're serious about a build, reach out early — we'll tell you honestly whether your timeline and site are a fit.</p>
+    </div>
+
+    <div data-fs-success class="fs-success">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+      <span>Message received. We'll be in touch.</span>
+    </div>
+    <div data-fs-error class="fs-form-error"></div>
+
+    <form id="contact-form" novalidate>
+      <div class="form-row">
+        <div class="form-group">
+          <label for="fname">Name</label>
+          <input type="text" id="fname" name="name" placeholder="Your name" autocomplete="name" required data-fs-field />
+          <span data-fs-error="name" class="field-error"></span>
+        </div>
+        <div class="form-group">
+          <label for="femail">Email</label>
+          <input type="email" id="femail" name="email" placeholder="your@email.com" autocomplete="email" required data-fs-field />
+          <span data-fs-error="email" class="field-error"></span>
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="flocation">Property / Site Location <span class="optional">(optional)</span></label>
+        <input type="text" id="flocation" name="location" placeholder="e.g. Okanagan Lake, Kelowna, Calgary area" data-fs-field />
+        <span data-fs-error="location" class="field-error"></span>
+      </div>
+      <div class="form-group">
+        <label for="fmessage">Tell us about your project</label>
+        <textarea id="fmessage" name="message" rows="5" placeholder="Site type, access, rough dimensions, timeline — anything helps." required data-fs-field></textarea>
+        <span data-fs-error="message" class="field-error"></span>
+      </div>
+      <input type="text" name="_gotcha" style="display:none" tabindex="-1" autocomplete="off" />
+      <button type="submit" data-fs-submit-btn class="btn-submit">
+        <span class="btn-text">Send Enquiry</span>
+        <span class="btn-sending">Sending…</span>
+      </button>
+    </form>
+
+    <p class="contact-alt">Prefer email directly? <a href="mailto: firenland@gmail.com">firenland@gmail.com</a></p>
   </div>
 </section>
 
